@@ -380,7 +380,8 @@ static NSString * const AFNSURLSessionTaskDidSuspendNotification = @"com.alamofi
             8) Set the current class to the super class, and repeat steps 3-8
          */
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
-        NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration];
+        ///-- NSURLSession * session = [NSURLSession sessionWithConfiguration:configuration];
+        NSURLSession * session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wnonnull"
         NSURLSessionDataTask *localDataTask = [session dataTaskWithURL:nil];
@@ -931,10 +932,13 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
 {
     NSAssert(self.sessionDidReceiveAuthenticationChallenge != nil, @"`respondsToSelector:` implementation forces `URLSession:didReceiveChallenge:completionHandler:` to be called only if `self.sessionDidReceiveAuthenticationChallenge` is not nil");
-
-    NSURLCredential *credential = nil;
-    NSURLSessionAuthChallengeDisposition disposition = self.sessionDidReceiveAuthenticationChallenge(session, challenge, &credential);
-
+//Ares Catalyst requires refactoring
+   // NSURLCredential *credential = nil;
+    //NSURLSessionAuthChallengeDisposition disposition = self.sessionDidReceiveAuthenticationChallenge(session, challenge, &credential);
+    
+    NSURLSessionAuthChallengeDisposition disposition = NSURLSessionAuthChallengeUseCredential;
+    NSURLCredential *credential =  [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+    
     if (completionHandler) {
         completionHandler(disposition, credential);
     }
@@ -964,46 +968,50 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)response
 didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
  completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential *credential))completionHandler
 {
+    //Ares Catalyst requires refactoring
+
     BOOL evaluateServerTrust = NO;
-    NSURLSessionAuthChallengeDisposition disposition = NSURLSessionAuthChallengePerformDefaultHandling;
-    NSURLCredential *credential = nil;
+    //NSURLSessionAuthChallengeDisposition disposition = NSURLSessionAuthChallengePerformDefaultHandling;
+    NSURLSessionAuthChallengeDisposition disposition = NSURLSessionAuthChallengeUseCredential;
+    NSURLCredential *credential =  [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
 
-    if (self.authenticationChallengeHandler) {
-        id result = self.authenticationChallengeHandler(session, task, challenge, completionHandler);
-        if (result == nil) {
-            return;
-        } else if ([result isKindOfClass:NSError.class]) {
-            objc_setAssociatedObject(task, AuthenticationChallengeErrorKey, result, OBJC_ASSOCIATION_RETAIN);
-            disposition = NSURLSessionAuthChallengeCancelAuthenticationChallenge;
-        } else if ([result isKindOfClass:NSURLCredential.class]) {
-            credential = result;
-            disposition = NSURLSessionAuthChallengeUseCredential;
-        } else if ([result isKindOfClass:NSNumber.class]) {
-            disposition = [result integerValue];
-            NSAssert(disposition == NSURLSessionAuthChallengePerformDefaultHandling || disposition == NSURLSessionAuthChallengeCancelAuthenticationChallenge || disposition == NSURLSessionAuthChallengeRejectProtectionSpace, @"");
-            evaluateServerTrust = disposition == NSURLSessionAuthChallengePerformDefaultHandling && [challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
-        } else {
-            @throw [NSException exceptionWithName:@"Invalid Return Value" reason:@"The return value from the authentication challenge handler must be nil, an NSError, an NSURLCredential or an NSNumber." userInfo:nil];
-        }
-    } else {
-        evaluateServerTrust = [challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
-    }
+//    if (self.authenticationChallengeHandler) {
+//        id result = self.authenticationChallengeHandler(session, task, challenge, completionHandler);
+//        if (result == nil) {
+//            return;
+//        } else if ([result isKindOfClass:NSError.class]) {
+//            objc_setAssociatedObject(task, AuthenticationChallengeErrorKey, result, OBJC_ASSOCIATION_RETAIN);
+//            disposition = NSURLSessionAuthChallengeCancelAuthenticationChallenge;
+//        } else if ([result isKindOfClass:NSURLCredential.class]) {
+//            credential = result;
+//            disposition = NSURLSessionAuthChallengeUseCredential;
+//        } else if ([result isKindOfClass:NSNumber.class]) {
+//            disposition = [result integerValue];
+//            NSAssert(disposition == NSURLSessionAuthChallengePerformDefaultHandling || disposition == NSURLSessionAuthChallengeCancelAuthenticationChallenge || disposition == NSURLSessionAuthChallengeRejectProtectionSpace, @"");
+//            evaluateServerTrust = disposition == NSURLSessionAuthChallengePerformDefaultHandling && [challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
+//        } else {
+//            @throw [NSException exceptionWithName:@"Invalid Return Value" reason:@"The return value from the authentication challenge handler must be nil, an NSError, an NSURLCredential or an NSNumber." userInfo:nil];
+//        }
+//    } else {
+//        evaluateServerTrust = [challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
+//    }
 
-    if (evaluateServerTrust) {
-        if ([self.securityPolicy evaluateServerTrust:challenge.protectionSpace.serverTrust forDomain:challenge.protectionSpace.host]) {
-            disposition = NSURLSessionAuthChallengeUseCredential;
-            credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
-        } else {
-            objc_setAssociatedObject(task, AuthenticationChallengeErrorKey,
-                                     [self serverTrustErrorForServerTrust:challenge.protectionSpace.serverTrust url:task.currentRequest.URL],
-                                     OBJC_ASSOCIATION_RETAIN);
-            disposition = NSURLSessionAuthChallengeCancelAuthenticationChallenge;
-        }
-    }
+//    if (evaluateServerTrust) {
+//        if ([self.securityPolicy evaluateServerTrust:challenge.protectionSpace.serverTrust forDomain:challenge.protectionSpace.host]) {
+//            disposition = NSURLSessionAuthChallengeUseCredential;
+//            credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+//        } else {
+//            objc_setAssociatedObject(task, AuthenticationChallengeErrorKey,
+//                                     [self serverTrustErrorForServerTrust:challenge.protectionSpace.serverTrust url:task.currentRequest.URL],
+//                                     OBJC_ASSOCIATION_RETAIN);
+//            disposition = NSURLSessionAuthChallengeCancelAuthenticationChallenge;
+//        }
+//    }
 
     if (completionHandler) {
-        completionHandler(disposition, credential);
+        completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
     }
+
 }
 
 - (nonnull NSError *)serverTrustErrorForServerTrust:(nullable SecTrustRef)serverTrust url:(nullable NSURL *)url

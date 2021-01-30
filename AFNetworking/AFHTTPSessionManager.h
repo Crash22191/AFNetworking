@@ -149,6 +149,14 @@ NS_ASSUME_NONNULL_BEGIN
                                success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success
                                failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
 
+
+//Ares Catalyst, same function as abuove but with nil headers
+- (nullable NSURLSessionDataTask *)GET:(NSString *)URLString
+                            parameters:(nullable id)parameters
+                              progress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
+                               success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success
+                               failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
+
 /**
  Creates and runs an `NSURLSessionDataTask` with a `HEAD` request.
  
@@ -163,6 +171,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSURLSessionDataTask *)HEAD:(NSString *)URLString
                              parameters:(nullable id)parameters
                                 headers:(nullable NSDictionary <NSString *, NSString *> *)headers
+                                success:(nullable void (^)(NSURLSessionDataTask *task))success
+                                failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
+
+//Ares Catalyst, same function as abuove but with nil headers
+- (nullable NSURLSessionDataTask *)HEAD:(NSString *)URLString
+                             parameters:(nullable id)parameters
                                 success:(nullable void (^)(NSURLSessionDataTask *task))success
                                 failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
 
@@ -181,6 +195,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSURLSessionDataTask *)POST:(NSString *)URLString
                              parameters:(nullable id)parameters
                                 headers:(nullable NSDictionary <NSString *, NSString *> *)headers
+                               progress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
+                                success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success
+                                failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
+
+//Ares Catalyst, same function as abuove but with nil headers
+- (nullable NSURLSessionDataTask *)POST:(NSString *)URLString
+                             parameters:(nullable id)parameters
                                progress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
                                 success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success
                                 failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
@@ -206,6 +227,13 @@ NS_ASSUME_NONNULL_BEGIN
                                 success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success
                                 failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
 
+//Ares Catalyst, same function as abuove but with nil headers
+- (nullable NSURLSessionDataTask *)POST:(NSString *)URLString
+                             parameters:(nullable id)parameters
+              constructingBodyWithBlock:(nullable void (^)(id <AFMultipartFormData> formData))block
+                               progress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
+                                success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success
+                                failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
 /**
  Creates and runs an `NSURLSessionDataTask` with a `PUT` request.
  
@@ -223,6 +251,11 @@ NS_ASSUME_NONNULL_BEGIN
                                success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success
                                failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
 
+//Ares Catalyst, same function as abuove but with nil headers
+- (nullable NSURLSessionDataTask *)PUT:(NSString *)URLString
+                            parameters:(nullable id)parameters
+                               success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success
+                               failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
 /**
  Creates and runs an `NSURLSessionDataTask` with a `PATCH` request.
  
@@ -234,6 +267,13 @@ NS_ASSUME_NONNULL_BEGIN
  
  @see -dataTaskWithRequest:completionHandler:
  */
+- (nullable NSURLSessionDataTask *)PATCH:(NSString *)URLString
+                              parameters:(nullable id)parameters
+                                 headers:(nullable NSDictionary <NSString *, NSString *> *)headers
+                                 success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success
+                                 failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
+
+//Ares Catalyst, same function as abuove but with nil headers
 - (nullable NSURLSessionDataTask *)PATCH:(NSString *)URLString
                               parameters:(nullable id)parameters
                                  headers:(nullable NSDictionary <NSString *, NSString *> *)headers
@@ -257,6 +297,12 @@ NS_ASSUME_NONNULL_BEGIN
                                   success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success
                                   failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
 
+//Ares Catalyst, same function as abuove but with nil headers
+- (nullable NSURLSessionDataTask *)DELETE:(NSString *)URLString
+                               parameters:(nullable id)parameters
+                                  success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success
+                                  failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
+
 /**
  Creates an `NSURLSessionDataTask` with a custom `HTTPMethod` request.
 
@@ -271,6 +317,16 @@ NS_ASSUME_NONNULL_BEGIN
 
  @see -dataTaskWithRequest:uploadProgress:downloadProgress:completionHandler:
  */
+- (nullable NSURLSessionDataTask *)dataTaskWithHTTPMethod:(NSString *)method
+                                                URLString:(NSString *)URLString
+                                               parameters:(nullable id)parameters
+                                                  headers:(nullable NSDictionary <NSString *, NSString *> *)headers
+                                           uploadProgress:(nullable void (^)(NSProgress *uploadProgress))uploadProgress
+                                         downloadProgress:(nullable void (^)(NSProgress *downloadProgress))downloadProgress
+                                                  success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success
+                                                  failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
+
+//Ares Catalyst, same function as abuove but with nil headers
 - (nullable NSURLSessionDataTask *)dataTaskWithHTTPMethod:(NSString *)method
                                                 URLString:(NSString *)URLString
                                                parameters:(nullable id)parameters

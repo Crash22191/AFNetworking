@@ -41,7 +41,8 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The criteria by which server trust should be evaluated against the pinned SSL certificates. Defaults to `AFSSLPinningModeNone`.
  */
-@property (readonly, nonatomic, assign) AFSSLPinningMode SSLPinningMode;
+//Ares catalyst 
+@property (readwrite, nonatomic, assign) AFSSLPinningMode SSLPinningMode;
 
 /**
  The certificates used to evaluate server trust according to the SSL pinning mode. 

@@ -234,10 +234,17 @@ forHTTPHeaderField:(NSString *)field;
 
  @return An `NSMutableURLRequest` object.
  */
-- (nullable NSMutableURLRequest *)requestWithMethod:(NSString *)method
+//Ares Catalyst
+
+- (NSMutableURLRequest *)requestWithMethod:(NSString *)method
                                           URLString:(NSString *)URLString
                                          parameters:(nullable id)parameters
                                               error:(NSError * _Nullable __autoreleasing *)error;
+
+//- (nullable NSMutableURLRequest *)requestWithMethod:(NSString *)method
+//                                          URLString:(NSString *)URLString
+//                                         parameters:(nullable id)parameters
+//                                              error:(NSError * _Nullable __autoreleasing *)error;
 
 /**
  Creates an `NSMutableURLRequest` object with the specified HTTP method and URLString, and constructs a `multipart/form-data` HTTP body, using the specified parameters and multipart form data block. See http://www.w3.org/TR/html4/interact/forms.html#h-17.13.4.2
@@ -278,7 +285,7 @@ forHTTPHeaderField:(NSString *)field;
 #pragma mark -
 
 /**
- The `AFMultipartFormData` protocol defines the methods supported by the parameter in the block argument of `AFHTTPRequestSerializer -multipartFormRequestWithMethod:URLString:parameters:constructingBodyWithBlock:error:`.
+ The `AFMultipartFormData` protocol defines the methods supported by the parameter in the block argument of `AFHTTPRequestSerializer -multipartFormRequestWithMethod:URLString:parameters:constructingBodyWithBlock:`.
  */
 @protocol AFMultipartFormData
 
