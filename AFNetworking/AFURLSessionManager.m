@@ -381,7 +381,7 @@ static NSString * const AFNSURLSessionTaskDidSuspendNotification = @"com.alamofi
          */
         NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration ephemeralSessionConfiguration];
         ///-- NSURLSession * session = [NSURLSession sessionWithConfiguration:configuration];
-        NSURLSession * session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
+        NSURLSession* session = [NSURLSession sessionWithConfiguration:configuration delegate:(AFURLSessionManager*)self delegateQueue:nil];
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wnonnull"
         NSURLSessionDataTask *localDataTask = [session dataTaskWithURL:nil];
