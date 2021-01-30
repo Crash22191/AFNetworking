@@ -41,15 +41,14 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  The criteria by which server trust should be evaluated against the pinned SSL certificates. Defaults to `AFSSLPinningModeNone`.
  */
-//Ares catalyst 
 @property (readwrite, nonatomic, assign) AFSSLPinningMode SSLPinningMode;
 
 /**
  The certificates used to evaluate server trust according to the SSL pinning mode. 
+
+  By default, this property is set to any (`.cer`) certificates included in the target compiling AFNetworking. Note that if you are using AFNetworking as embedded framework, no certificates will be pinned by default. Use `certificatesInBundle` to load certificates from your target, and then create a new policy by calling `policyWithPinningMode:withPinnedCertificates`.
  
  Note that if pinning is enabled, `evaluateServerTrust:forDomain:` will return true if any pinned certificate matches.
-
- @see policyWithPinningMode:withPinnedCertificates:
  */
 @property (nonatomic, strong, nullable) NSSet <NSData *> *pinnedCertificates;
 
@@ -91,14 +90,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  Creates and returns a security policy with the specified pinning mode.
- 
- Certificates with the `.cer` extension found in the main bundle will be pinned. If you want more control over which certificates are pinned, please use `policyWithPinningMode:withPinnedCertificates:` instead.
 
  @param pinningMode The SSL pinning mode.
 
  @return A new security policy.
-
- @see -policyWithPinningMode:withPinnedCertificates:
  */
 + (instancetype)policyWithPinningMode:(AFSSLPinningMode)pinningMode;
 
@@ -109,10 +104,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param pinnedCertificates The certificates to pin against.
 
  @return A new security policy.
-
- @see +certificatesInBundle:
- @see -pinnedCertificates
-*/
+ */
 + (instancetype)policyWithPinningMode:(AFSSLPinningMode)pinningMode withPinnedCertificates:(NSSet <NSData *> *)pinnedCertificates;
 
 ///------------------------------
@@ -131,6 +123,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (BOOL)evaluateServerTrust:(SecTrustRef)serverTrust
                   forDomain:(nullable NSString *)domain;
+
+- (NSURLCredential*) evaluateCredentialForServerTrust:(SecTrustRef)serverTrust forDomain:(nullable NSString *)domain;
 
 @end
 
